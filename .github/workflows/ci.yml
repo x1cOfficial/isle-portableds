@@ -81,6 +81,11 @@ jobs:
           unzip "makerom-v0.18-ubuntu_x86_64.zip" "makerom" -d "/opt/devkitpro/tools/bin"
           chmod a+x /opt/devkitpro/tools/bin/makerom
 
+      - name: Install dependencies for NDS
+        if: ${{ matrix.nds }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake libpthread-stubs0-dev libiconv-hook-dev
       - name: Install Linux dependencies (apt-get)
         if: ${{ matrix.linux }}
         run: |
