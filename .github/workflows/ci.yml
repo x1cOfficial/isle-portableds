@@ -46,6 +46,7 @@ jobs:
           - { name: 'iOS',                 os: 'macos-15',       generator: 'Xcode',                 dx5: false, config: false, brew: true,  werror: true,   clang-tidy: false,  cmake-args: '-DCMAKE_SYSTEM_NAME=iOS' }
           - { name: 'Emscripten',          os: 'ubuntu-latest',  generator: 'Ninja',                 dx5: false, config: false, emsdk: true, werror: true,   clang-tidy: false,  cmake-wrapper: 'emcmake' }
           - { name: 'Nintendo 3DS',        os: 'ubuntu-latest',  generator: 'Ninja',                 dx5: false, config: false, n3ds: true,  werror: true,   clang-tidy: false,  container: 'devkitpro/devkitarm:latest', cmake-args: '-DCMAKE_TOOLCHAIN_FILE=/opt/devkitpro/cmake/3DS.cmake' }
+          - { name: 'Nintendo DS',         os: 'ubuntu-latest',  generator: 'Ninja',                 dx5: false, config: false, nds: true,   werror: true,   clang-tidy: false,  container: 'devkitpro/devkitarm:latest', cmake-args: '-DCMAKE_TOOLCHAIN_FILE=/opt/devkitpro/cmake/NDS.cmake' }
           - { name: 'Xbox One',            os: 'windows-latest', generator: 'Visual Studio 17 2022', dx5: false, config: false, msvc: true,  werror: false,  clang-tidy: false,  vc-arch: 'amd64', cmake-args: '-DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION=10.0.26100.0', xbox-one: true}
     steps:
       - name: Setup vcvars
@@ -170,6 +171,13 @@ jobs:
           mkdir dist
           mv *.3dsx dist/
           mv *.cia dist/
+
+      - name: Package (NDS)
+        if: ${{ matrix.nds }}
+        run: |
+          cd build
+          mkdir dist
+          mv *.nds dist/
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
